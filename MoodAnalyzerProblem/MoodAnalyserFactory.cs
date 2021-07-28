@@ -77,5 +77,26 @@ namespace MoodAnalyzerProblem
                 throw new CustomException(CustomException.ExceptionType.METHOD_NOT_FOUND,"Method Not Found");
             }
         }
+
+        public string SetField(string message , string fieldName)
+        {
+            try
+            {
+                MoodAnalyser analyser = new MoodAnalyser();
+                Type type = typeof(MoodAnalyser);
+                FieldInfo field = type.GetField(fieldName, BindingFlags.Public | BindingFlags.Instance);
+                if(message == null)
+                {
+                    throw new CustomException(CustomException.ExceptionType.EMPTY_MESSAGE, "Message should not be empty");
+
+                }
+                field.SetValue(analyser, message);
+                return analyser.message;                           
+            }
+            catch
+            {
+                throw new CustomException(CustomException.ExceptionType.INVALID_FIELD, "Field not found");
+            }
+        }
     }
 }
