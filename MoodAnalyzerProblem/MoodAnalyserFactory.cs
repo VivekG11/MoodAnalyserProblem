@@ -59,5 +59,23 @@ namespace MoodAnalyzerProblem
             }
             return default;
         }
+
+        public string InvokeAnalyser(string message, string methodName)
+        {
+            try
+            {
+                Type type = typeof(MoodAnalyser);
+
+                MethodInfo method = type.GetMethod(methodName);
+                MoodAnalyserFactory factory = new MoodAnalyserFactory();
+                object analyserObject = factory.ParameterizedMoodAnalyser("MoodAnalyzerProblem.MoodAnalyser", "MoodAnalyser", message);
+                object info = method.Invoke(analyserObject, null);
+                return info.ToString();
+            }
+            catch(NullReferenceException)
+            {
+                throw new CustomException(CustomException.ExceptionType.METHOD_NOT_FOUND,"Method Not Found");
+            }
+        }
     }
 }
